@@ -48,7 +48,11 @@ h2.d{font-size:clamp(38px,4.6vw,78px);margin:18px 0 0}
 .nav a{font:600 14px/1 var(--fb);text-decoration:none;padding:12px 12px;border-radius:999px;position:relative;white-space:nowrap}
 .nav a::after{content:"";position:absolute;left:12px;right:12px;bottom:6px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
 @media (hover:hover){.nav a:hover::after{transform:scaleX(1)}}
-.nav a.acad{background:var(--teal);color:#fff;padding:12px 18px}.nav a.acad::after{display:none}
+.nav{position:relative}.nav a{z-index:1;padding:12px 14px;transition:color .35s}
+.nav .pill{position:absolute;left:0;top:50%;width:0;height:38px;border-radius:999px;background:var(--teal);box-shadow:0 6px 18px -8px rgba(28,137,144,.7);transform:translate(0,-50%);pointer-events:none;z-index:0;opacity:0}
+.nav .pill.go{transition:transform .55s var(--ease),width .55s var(--ease),opacity .3s}
+.nav a.on{color:#fff}.nav a.on::after{display:none}
+.nav a.cur{background:var(--teal);color:#fff}.nav a.cur::after{display:none}
 .hdr{display:flex;align-items:center;gap:6px}
 .cartb{position:relative;width:46px;height:46px;border-radius:50%;border:1px solid currentColor;background:transparent;display:grid;place-items:center;opacity:.92}
 .cartb svg{width:20px;height:20px}

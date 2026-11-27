@@ -20,9 +20,9 @@ function prep(){if(RM)return;$$('.ttl').forEach(splitL);$$('[data-split]').forEa
 /* ---------- language ---------- */
 var ATT={'data-en-aria':'aria-label','data-en-ph':'placeholder','data-en-alt':'alt','data-en-title':'title'};
 $$('[data-en]').forEach(function(e){e.dataset.el=e.innerHTML});
-function setLang(l,first){H.lang=l;try{localStorage.setItem('bn-lang',l)}catch(e){}
+function setLang(l,first){setTimeout(function(){typeof spy=='function'&&spy(true)},60);H.lang=l;try{localStorage.setItem('bn-lang',l)}catch(e){}
  $$('[data-en]').forEach(function(e){if(e.dataset.el==null)e.dataset.el=e.innerHTML;e.innerHTML=l==='en'?e.dataset.en:e.dataset.el});
- Object.keys(ATT).forEach(function(a){$$('['+a+']').forEach(function(e){var k='el'+ATT[a];if(e.dataset[k]==null)e.dataset[k]=e.getAttribute(ATT[a])||'';e.setAttribute(ATT[a],l==='en'?e.getAttribute(a):e.dataset[k])})});
+ Object.keys(ATT).forEach(function(a){$$('['+a+']').forEach(function(e){var k='el'+ATT[a].replace(/(^|-)(\w)/g,function(m,x,c){return c.toUpperCase()});if(e.dataset[k]==null)e.dataset[k]=e.getAttribute(ATT[a])||'';e.setAttribute(ATT[a],l==='en'?e.getAttribute(a):e.dataset[k])})});
  d.title=META[l].t;var md=$('meta[name=description]');if(md)md.content=META[l].d;
  $$('.flags button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.l===l)});
  if(!first){prep();$$('.ttl,[data-split]').forEach(function(e){e.classList.add('in')});$('.hero').classList.add('in');certPaint();renderCart();rqFix()}}
@@ -74,7 +74,14 @@ function onScroll(){tick=false;var y=scrollY,vh=innerHeight,sh=d.documentElement
  if(qw.length){var qr=qq.getBoundingClientRect(),qp=Math.min(1,Math.max(0,(vh*.85-qr.top)/(vh*.45)));qw.forEach(function(w,i){w.classList.toggle('on',i<qp*qw.length+.5)})}
  bio.forEach(function(p){p.classList.toggle('lit',p.getBoundingClientRect().top<vh*.72)});
  if(tl2){var tr=tl2.getBoundingClientRect();tl2.querySelector('.lf2').style.setProperty('--p',Math.min(1,Math.max(0,(vh*.7-tr.top)/tr.height)));tli.forEach(function(l){l.classList.toggle('lit',l.getBoundingClientRect().top<vh*.7)})}}
-addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(onScroll)}},{passive:true});addEventListener('resize',onScroll);onScroll();
+/* nav pill follows the section on screen */
+var nav=$('.hd .nav'),pill=null,nl=[],ns=[],cur=-1;
+if(nav){pill=d.createElement('span');pill.className='pill';pill.setAttribute('aria-hidden','true');nav.insertBefore(pill,nav.firstChild);nl=[].slice.call(nav.querySelectorAll('a[href^="#"]'));ns=nl.map(function(a){return d.getElementById(a.getAttribute('href').slice(1))})}
+function pillTo(i,force){if(!pill||(i===cur&&!force))return;cur=i;nl.forEach(function(a,j){a.classList.toggle('on',j===i);if(j===i)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')});var a=nl[i];if(!a||!a.offsetWidth)return;pill.style.width=a.offsetWidth+'px';pill.style.height=a.offsetHeight+'px';pill.style.transform='translate('+a.offsetLeft+'px,-50%)';pill.style.opacity=1;if(!pill.classList.contains('go'))requestAnimationFrame(function(){pill.classList.add('go')})}
+function spy(force){if(!pill)return;var vh=innerHeight,i=0;ns.forEach(function(s,j){if(s&&s.getBoundingClientRect().top<=vh*.38)i=j});if(scrollY+vh>=d.documentElement.scrollHeight-4)i=nl.length-1;pillTo(i,force)}
+d.fonts&&d.fonts.ready.then(function(){spy(true)});addEventListener('load',function(){spy(true)});
+var _os=onScroll;onScroll=function(){_os();spy()};
+addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(onScroll)}},{passive:true});addEventListener('resize',function(){onScroll();spy(true)});onScroll();
 /* ---------- ambient rings in academy ---------- */
 var amb=$('.acad .amb');if(amb&&!RM){for(var k=0;k<5;k++){var r=d.createElement('i'),s=280+k*240;r.style.cssText='width:'+s+'px;height:'+s+'px;right:'+(-s/2+80)+'px;top:'+(200-s/2)+'px;animation:pulse '+(14+k*3)+'s ease-in-out '+(-k*2)+'s infinite';amb.appendChild(r)}
  var st=d.createElement('style');st.textContent='@keyframes pulse{50%{transform:scale(1.06);opacity:.5}}';d.head.appendChild(st)}
