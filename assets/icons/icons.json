@@ -1,0 +1,16 @@
+{
+ "source": {
+  "kind": "file",
+  "ref": "assets/img/body-noesis-icon.svg"
+ },
+ "source_md5": "9be84295f7eaf66394c55c65123b55d6",
+ "version": "ce3b1644",
+ "tile": null,
+ "crop": null,
+ "header": [
+  "inline",
+  "index.html",
+  "7c3c5593e084808dbc22d5faa3666623"
+ ],
+ "made": "2026-11-27"
+}
