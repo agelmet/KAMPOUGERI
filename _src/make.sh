@@ -9,4 +9,5 @@ cd $K/site && python3 $A/favicon.py make $K/site assets/img/body-noesis-icon.svg
 python3 $A/seo_live.py fix $K/site $D
 python3 $A/seo_rank.py en $K/site $D
 python3 $A/ai_seo.py fix $K/site $D
+grep -q "Disallow: /_src/" $K/site/robots.txt || sed -i "s|^Allow: /$|Allow: /\nDisallow: /_src/|" $K/site/robots.txt
 python3 $A/seo_live.py schema $K/site
